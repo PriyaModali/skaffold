@@ -22,7 +22,7 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/util"
 )
 
-// This config version is not yet released, it is SAFE TO MODIFY the structs in this file.
+// !!! WARNING !!! This config version is already released, please DO NOT MODIFY the structs in this file.
 const Version string = "skaffold/v2beta10"
 
 // NewSkaffoldConfig creates a SkaffoldConfig
@@ -89,7 +89,7 @@ type PortForwardResource struct {
 	Namespace string `yaml:"namespace,omitempty"`
 
 	// Port is the resource port that will be forwarded.
-	Port int `yaml:"port,omitempty"`
+	Port util.IntOrString `yaml:"port,omitempty"`
 
 	// Address is the local address to bind to. Defaults to the loopback address 127.0.0.1.
 	Address string `yaml:"address,omitempty"`
@@ -1125,6 +1125,9 @@ type DockerArtifact struct {
 	// Secret contains information about a local secret passed to `docker build`,
 	// along with optional destination information.
 	Secret *DockerSecret `yaml:"secret,omitempty"`
+
+	// SSH is used to pass in --ssh to docker build to use SSH agent. Format is "default|<id>[=<socket>|<key>[,<key>]]".
+	SSH string `yaml:"ssh,omitempty"`
 }
 
 // DockerSecret contains information about a local secret passed to `docker build`,
