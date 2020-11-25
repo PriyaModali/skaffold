@@ -27,11 +27,11 @@ import (
 // NewCmdTest describes the CLI command to test artifacts.
 func NewCmdTest() *cobra.Command {
 	return NewCmd("test").
+		WithDescription("Test the artifacts").
 		WithHouseKeepingMessages().
 		NoArgs(doTest)
 }
 
 func doTest(ctx context.Context, out io.Writer) error {
-	// return fmt.Errorf("executing Test: %w", err)
-	return errors.New("executing Test")
+	return errors.New("Executing Test command")
 }
