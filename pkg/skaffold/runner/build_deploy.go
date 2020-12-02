@@ -73,16 +73,16 @@ func (r *SkaffoldRunner) BuildAndTest(ctx context.Context, out io.Writer, artifa
 			return nil, err
 		}
 
+		if !r.runCtx.SkipTests() {
+			if err = r.tester.Test(ctx, out, bRes); err != nil {
+				return nil, err
+			}
+		}
+
 		return bRes, nil
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	if !r.runCtx.SkipTests() {
-		if err = r.tester.Test(ctx, out, bRes); err != nil {
-			return nil, err
-		}
 	}
 
 	// Update which images are logged.
@@ -92,6 +92,46 @@ func (r *SkaffoldRunner) BuildAndTest(ctx context.Context, out io.Writer, artifa
 	r.builds = build.MergeWithPreviousBuilds(bRes, r.builds)
 
 	return bRes, nil
+}
+
+// TestAndLog tests a list of already built artifacts and optionally show the logs.
+func (r *SkaffoldRunner) TestAndLog(ctx context.Context, out io.Writer, artifacts []build.Artifact) error {
+	// Update which images are logged.
+	r.addTagsToPodSelector(artifacts)
+
+	logger := r.createLogger(out, artifacts)
+	defer logger.Stop()
+
+	// Logs should be retrieved up to just before the test
+	logger.SetSince(time.Now())
+
+	// First test
+	// if err := r.tester.Test(ctx, out, artifacts); err != nil {
+	// 	return err
+	// }
+
+	if err := r.tester.Test(ctx, out, artifacts); err != nil {
+		return err
+	}
+
+	forwarderManager := r.createForwarder(out)
+	defer forwarderManager.Stop()
+
+	if err := forwarderManager.Start(ctx); err != nil {
+		logrus.Warnln("Error starting port forwarding:", err)
+	}
+
+	// Start printing the logs after deploy is finished
+	if err := logger.Start(ctx); err != nil {
+		return fmt.Errorf("starting logger: %w", err)
+	}
+
+	if r.runCtx.Tail() || r.runCtx.PortForward() {
+		color.Yellow.Fprintln(out, "Press Ctrl+C to exit")
+		<-ctx.Done()
+	}
+
+	return nil
 }
 
 // DeployAndLog deploys a list of already built artifacts and optionally show the logs.
