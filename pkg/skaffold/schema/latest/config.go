@@ -22,8 +22,8 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/util"
 )
 
-// !!! WARNING !!! This config version is already released, please DO NOT MODIFY the structs in this file.
-const Version string = "skaffold/v2beta10"
+// This config version is not yet released, it is SAFE TO MODIFY the structs in this file.
+const Version string = "skaffold/v2beta11"
 
 // NewSkaffoldConfig creates a SkaffoldConfig
 func NewSkaffoldConfig() util.VersionedConfig {
@@ -148,6 +148,9 @@ type GitTagger struct {
 
 	// Prefix adds a fixed prefix to the tag.
 	Prefix string `yaml:"prefix,omitempty"`
+
+	// IgnoreChanges specifies whether to omit the `-dirty` postfix if there are uncommitted changes.
+	IgnoreChanges bool `yaml:"ignoreChanges,omitempty"`
 }
 
 // EnvTemplateTagger *beta* tags images with a configurable template string.
