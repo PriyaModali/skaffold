@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Skaffold Authors
+Copyright 2020 The Skaffold Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ func NewCmdTest() *cobra.Command {
 		WithExample("Build the artifacts and then test them", "build -q | skaffold test --build-artifacts -").
 		WithCommonFlags().
 		WithFlags(func(f *pflag.FlagSet) {
-			f.VarP(&deployFromBuildOutputFile, "build-artifacts", "a", "File containing build result from a previous 'skaffold build --file-output'")
+			f.VarP(&fromBuildOutputFile, "build-artifacts", "a", "File containing build result from a previous 'skaffold build --file-output'")
 		}).
 		WithHouseKeepingMessages().
 		NoArgs(doTest)
@@ -45,7 +45,7 @@ func NewCmdTest() *cobra.Command {
 
 func doTest(ctx context.Context, out io.Writer) error {
 	return withRunner(ctx, func(r runner.Runner, config *latest.SkaffoldConfig) error {
-		buildArtifacts, err := tagArtifacts(out, r, config)
+		buildArtifacts, err := getBuildArtifactsAndSetTags(out, r, config)
 		if err != nil {
 			return err
 		}
@@ -61,20 +61,3 @@ func doTest(ctx context.Context, out io.Writer) error {
 		return r.TestAndLog(ctx, out, buildArtifacts)
 	})
 }
-
-// func tagArtifacts(out io.Writer, r runner.Runner, config *latest.SkaffoldConfig) ([]build.Artifact, error) {
-// 	buildArtifacts, err := getArtifacts(out, fromBuildOutputFile.BuildArtifacts(), fromPreBuiltImages.Artifacts(), config.Build.Artifacts)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	for i := range buildArtifacts {
-// 		tag, err := r.ApplyDefaultRepo(buildArtifacts[i].Tag)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		buildArtifacts[i].Tag = tag
-// 	}
-
-// 	return buildArtifacts, nil
-// }

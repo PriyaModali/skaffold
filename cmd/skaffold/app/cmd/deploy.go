@@ -24,17 +24,16 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/GoogleContainerTools/skaffold/cmd/skaffold/app/flags"
 	"github.com/GoogleContainerTools/skaffold/cmd/skaffold/app/tips"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/build"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/runner"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 )
 
-var (
-	deployFromBuildOutputFile flags.BuildOutputFileFlag
-	preBuiltImages            flags.Images
-)
+// var (
+// 	deployFromBuildOutputFile flags.BuildOutputFileFlag
+// 	preBuiltImages            flags.Images
+// )
 
 // NewCmdDeploy describes the CLI command to deploy artifacts.
 func NewCmdDeploy() *cobra.Command {
@@ -46,8 +45,8 @@ func NewCmdDeploy() *cobra.Command {
 		WithExample("Deploy without first rendering the manifests", "deploy --skip-render").
 		WithCommonFlags().
 		WithFlags(func(f *pflag.FlagSet) {
-			f.VarP(&preBuiltImages, "images", "i", "A list of pre-built images to deploy")
-			f.VarP(&deployFromBuildOutputFile, "build-artifacts", "a", "File containing build result from a previous 'skaffold build --file-output'")
+			f.VarP(&fromPreBuiltImages, "images", "i", "A list of pre-built images to deploy")
+			f.VarP(&fromBuildOutputFile, "build-artifacts", "a", "File containing build result from a previous 'skaffold build --file-output'")
 			f.BoolVar(&opts.SkipRender, "skip-render", false, "Don't render the manifests, just deploy them")
 		}).
 		WithHouseKeepingMessages().
@@ -60,7 +59,7 @@ func doDeploy(ctx context.Context, out io.Writer) error {
 			return r.DeployAndLog(ctx, out, []build.Artifact{})
 		}
 
-		buildArtifacts, err := tagArtifacts(out, r, config)
+		buildArtifacts, err := getBuildArtifactsAndSetTags(out, r, config)
 		if err != nil {
 			return err
 		}

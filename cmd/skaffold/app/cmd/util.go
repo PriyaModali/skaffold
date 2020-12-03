@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Skaffold Authors
+Copyright 2020 The Skaffold Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ var (
 	fromPreBuiltImages  flags.Images
 )
 
-func tagArtifacts(out io.Writer, r runner.Runner, config *latest.SkaffoldConfig) ([]build.Artifact, error) {
+func getBuildArtifactsAndSetTags(out io.Writer, r runner.Runner, config *latest.SkaffoldConfig) ([]build.Artifact, error) {
 	buildArtifacts, err := getArtifacts(out, fromBuildOutputFile.BuildArtifacts(), fromPreBuiltImages.Artifacts(), config.Build.Artifacts)
 	if err != nil {
 		return nil, err
