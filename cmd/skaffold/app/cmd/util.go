@@ -19,20 +19,14 @@ package cmd
 import (
 	"io"
 
-	"github.com/GoogleContainerTools/skaffold/cmd/skaffold/app/flags"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/build"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/build/tag"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/runner"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 )
 
-var (
-	fromBuildOutputFile flags.BuildOutputFileFlag
-	fromPreBuiltImages  flags.Images
-)
-
 func getBuildArtifactsAndSetTags(out io.Writer, r runner.Runner, config *latest.SkaffoldConfig) ([]build.Artifact, error) {
-	buildArtifacts, err := getArtifacts(out, fromBuildOutputFile.BuildArtifacts(), fromPreBuiltImages.Artifacts(), config.Build.Artifacts)
+	buildArtifacts, err := getArtifacts(out, fromBuildOutputFile.BuildArtifacts(), preBuiltImages.Artifacts(), config.Build.Artifacts)
 	if err != nil {
 		return nil, err
 	}
