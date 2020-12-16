@@ -105,21 +105,21 @@ func TestDevFailFirstCycle(t *testing.T) {
 			monitor:         &NoopMonitor{},
 			expectedActions: []Actions{{}},
 		},
-		{
-			description: "fails to test the first time",
-			testBench:   &TestBench{testErrors: []error{errors.New("")}},
-			monitor:     &NoopMonitor{},
-			expectedActions: []Actions{{
-				Built: []string{"img:1"},
-			}},
-		},
+		// {
+		// 	description: "fails to test the first time",
+		// 	testBench:   &TestBench{testErrors: []error{errors.New("")}},
+		// 	monitor:     &NoopMonitor{},
+		// 	expectedActions: []Actions{{
+		// 		Built: []string{"img:1"},
+		// 	}},
+		// },
 		{
 			description: "fails to deploy the first time",
 			testBench:   &TestBench{deployErrors: []error{errors.New("")}},
 			monitor:     &NoopMonitor{},
 			expectedActions: []Actions{{
-				Built:  []string{"img:1"},
-				Tested: []string{"img:1"},
+				Built: []string{"img:1"},
+				// Tested: []string{"img:1"},
 			}},
 		},
 		{
@@ -127,8 +127,8 @@ func TestDevFailFirstCycle(t *testing.T) {
 			testBench:   &TestBench{},
 			monitor:     &FailMonitor{},
 			expectedActions: []Actions{{
-				Built:    []string{"img:1"},
-				Tested:   []string{"img:1"},
+				Built: []string{"img:1"},
+				// Tested:   []string{"img:1"},
 				Deployed: []string{"img:1"},
 			}},
 		},
@@ -166,30 +166,30 @@ func TestDev(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{},
 			},
 		},
-		{
-			description: "ignore subsequent test errors",
-			testBench:   &TestBench{testErrors: []error{nil, errors.New("")}},
-			watchEvents: []filemon.Events{
-				{Modified: []string{"file1", "file2"}},
-			},
-			expectedActions: []Actions{
-				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
-					Deployed: []string{"img1:1", "img2:1"},
-				},
-				{
-					Built: []string{"img1:2", "img2:2"},
-				},
-			},
-		},
+		// {
+		// 	description: "ignore subsequent test errors",
+		// 	testBench:   &TestBench{testErrors: []error{nil, errors.New("")}},
+		// 	watchEvents: []filemon.Events{
+		// 		{Modified: []string{"file1", "file2"}},
+		// 	},
+		// 	expectedActions: []Actions{
+		// 		{
+		// 			Built: []string{"img1:1", "img2:1"},
+		// 			// Tested:   []string{"img1:1", "img2:1"},
+		// 			Deployed: []string{"img1:1", "img2:1"},
+		// 		},
+		// 		{
+		// 			Built: []string{"img1:2", "img2:2"},
+		// 		},
+		// 	},
+		// },
 		{
 			description: "ignore subsequent deploy errors",
 			testBench:   &TestBench{deployErrors: []error{nil, errors.New("")}},
@@ -198,13 +198,13 @@ func TestDev(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:  []string{"img1:2", "img2:2"},
-					Tested: []string{"img1:2", "img2:2"},
+					Built: []string{"img1:2", "img2:2"},
+					// Tested: []string{"img1:2", "img2:2"},
 				},
 			},
 		},
@@ -216,13 +216,13 @@ func TestDev(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:    []string{"img1:2", "img2:2"},
-					Tested:   []string{"img1:2", "img2:2"},
+					Built: []string{"img1:2", "img2:2"},
+					// Tested:   []string{"img1:2", "img2:2"},
 					Deployed: []string{"img1:2", "img2:2"},
 				},
 			},
@@ -235,13 +235,13 @@ func TestDev(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:    []string{"img2:2"},
-					Tested:   []string{"img2:2"},
+					Built: []string{"img2:2"},
+					// Tested:   []string{"img2:2"},
 					Deployed: []string{"img1:1", "img2:2"},
 				},
 			},
@@ -254,8 +254,8 @@ func TestDev(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
@@ -301,30 +301,30 @@ func TestDev_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{},
 			},
 		},
-		{
-			description: "ignore subsequent test errors",
-			testBench:   &TestBench{testErrors: []error{nil, errors.New("")}},
-			watchEvents: []filemon.Events{
-				{Modified: []string{"file1"}},
-			},
-			expectedActions: []Actions{
-				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
-					Deployed: []string{"img1:1", "img2:1"},
-				},
-				{
-					Built: []string{"img1:2", "img2:2"},
-				},
-			},
-		},
+		// {
+		// 	description: "ignore subsequent test errors",
+		// 	testBench:   &TestBench{testErrors: []error{nil, errors.New("")}},
+		// 	watchEvents: []filemon.Events{
+		// 		{Modified: []string{"file1"}},
+		// 	},
+		// 	expectedActions: []Actions{
+		// 		{
+		// 			Built: []string{"img1:1", "img2:1"},
+		// 			// Tested:   []string{"img1:1", "img2:1"},
+		// 			Deployed: []string{"img1:1", "img2:1"},
+		// 		},
+		// 		{
+		// 			Built: []string{"img1:2", "img2:2"},
+		// 		},
+		// 	},
+		// },
 		{
 			description: "ignore subsequent deploy errors",
 			testBench:   &TestBench{deployErrors: []error{nil, errors.New("")}},
@@ -333,13 +333,13 @@ func TestDev_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:  []string{"img1:2", "img2:2"},
-					Tested: []string{"img1:2", "img2:2"},
+					Built: []string{"img1:2", "img2:2"},
+					// Tested: []string{"img1:2", "img2:2"},
 				},
 			},
 		},
@@ -351,13 +351,13 @@ func TestDev_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:    []string{"img1:2", "img2:2"},
-					Tested:   []string{"img1:2", "img2:2"},
+					Built: []string{"img1:2", "img2:2"},
+					// Tested:   []string{"img1:2", "img2:2"},
 					Deployed: []string{"img1:2", "img2:2"},
 				},
 			},
@@ -370,13 +370,13 @@ func TestDev_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:    []string{"img1:2", "img2:2"},
-					Tested:   []string{"img1:2", "img2:2"},
+					Built: []string{"img1:2", "img2:2"},
+					// Tested:   []string{"img1:2", "img2:2"},
 					Deployed: []string{"img1:2", "img2:2"},
 				},
 			},
@@ -389,8 +389,8 @@ func TestDev_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
@@ -443,8 +443,8 @@ func TestDevSync(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
@@ -466,8 +466,8 @@ func TestDevSync(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
@@ -541,8 +541,8 @@ func TestDevSync_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
@@ -563,13 +563,13 @@ func TestDevSync_WithDependencies(t *testing.T) {
 			},
 			expectedActions: []Actions{
 				{
-					Built:    []string{"img1:1", "img2:1"},
-					Tested:   []string{"img1:1", "img2:1"},
+					Built: []string{"img1:1", "img2:1"},
+					// Tested:   []string{"img1:1", "img2:1"},
 					Deployed: []string{"img1:1", "img2:1"},
 				},
 				{
-					Built:    []string{"img2:2", "img1:2"},
-					Tested:   []string{"img2:2", "img1:2"},
+					Built: []string{"img2:2", "img1:2"},
+					// Tested:   []string{"img2:2", "img1:2"},
 					Deployed: []string{"img1:2", "img2:2"},
 				},
 			},
