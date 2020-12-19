@@ -32,8 +32,8 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 )
 
-// BuildAndTest builds and tests a list of artifacts.
-func (r *SkaffoldRunner) BuildAndTest(ctx context.Context, out io.Writer, artifacts []*latest.Artifact) ([]build.Artifact, error) {
+// Build builds a list of artifacts.
+func (r *SkaffoldRunner) Build(ctx context.Context, out io.Writer, artifacts []*latest.Artifact) ([]build.Artifact, error) {
 	// Use tags directly from the Kubernetes manifests.
 	if r.runCtx.DigestSource() == noneDigestSource {
 		return []build.Artifact{}, nil
@@ -79,11 +79,11 @@ func (r *SkaffoldRunner) BuildAndTest(ctx context.Context, out io.Writer, artifa
 		return nil, err
 	}
 
-	// if !r.runCtx.SkipTests() {
-	// 	if err = r.tester.Test(ctx, out, bRes); err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	if !r.runCtx.SkipTests() {
+		if err = r.tester.Test(ctx, out, bRes); err != nil {
+			return nil, err
+		}
+	}
 
 	// Update which images are logged.
 	r.addTagsToPodSelector(bRes)
