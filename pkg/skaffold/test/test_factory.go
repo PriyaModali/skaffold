@@ -30,6 +30,7 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/docker"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/logfile"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
+	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/custom"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/structure"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/util"
 )
@@ -108,11 +109,13 @@ func (t FullTester) Test(ctx context.Context, out io.Writer, bRes []build.Artifa
 		return err
 	}
 
+	color.Default.Fprintln(out, "Priya: before runTests...")
 	return t.runTests(ctx, out, bRes)
 }
 
 func (t FullTester) runTests(ctx context.Context, out io.Writer, bRes []build.Artifact) error {
 	for _, test := range t.testCases {
+		color.Default.Fprintln(out, "Priya: before resolveArtifactImageTag...")
 		fqn, found := resolveArtifactImageTag(test.ImageName, bRes)
 		if !found {
 			logrus.Debugln("Skipping tests for", test.ImageName, "since it wasn't built")
@@ -131,8 +134,18 @@ func (t FullTester) runTests(ctx context.Context, out io.Writer, bRes []build.Ar
 		}
 
 		// if fqn, err := t.getImage(ctx, out, bRes, test); err != nil {
-		if err := t.runStructureTests(ctx, out, fqn, test); err != nil {
-			return fmt.Errorf("running structure tests: %w", err)
+		color.Default.Fprintln(out, "Priya: before runStructureTests...")
+		if len(test.StructureTests) != 0 {
+			if err := t.runStructureTests(ctx, out, fqn, test); err != nil {
+				return fmt.Errorf("running structure tests: %w", err)
+			}
+		}
+
+		color.Default.Fprintln(out, "Priya: before runCustomTests...")
+		if len(test.CustomTests) != 0 {
+			if err := t.runCustomTests(ctx, out, fqn, test); err != nil {
+				return fmt.Errorf("running custom tests: %w", err)
+			}
 		}
 	}
 
@@ -165,6 +178,17 @@ func (t FullTester) runStructureTests(ctx context.Context, out io.Writer, fqn st
 	runner := structure.NewRunner(tc.StructureTests, t.workingDir, t.localDaemon.ExtraEnv())
 
 	return runner.Test(ctx, out, fqn)
+}
+
+func (t FullTester) runCustomTests(ctx context.Context, out io.Writer, fqn string, tc *latest.TestCase) error {
+	for _, test := range tc.CustomTests {
+		runner := custom.NewRunner(test, t.workingDir, t.localDaemon.ExtraEnv())
+
+		if err := runner.Test(ctx, out, fqn); err != nil {
+			return fmt.Errorf("custom test runner error: %w", err)
+		}
+	}
+	return nil
 }
 
 func resolveArtifactImageTag(imageName string, bRes []build.Artifact) (string, bool) {

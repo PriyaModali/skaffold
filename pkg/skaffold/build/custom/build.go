@@ -25,6 +25,7 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 )
 
+// modali@
 // Build builds an artifact using a custom script
 func (b *Builder) Build(ctx context.Context, out io.Writer, artifact *latest.Artifact, tag string) (string, error) {
 	if err := b.runBuildScript(ctx, out, artifact, tag); err != nil {
