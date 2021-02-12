@@ -28,6 +28,7 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/docker"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/logfile"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
+	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/custom"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/structure"
 )
 
@@ -69,6 +70,13 @@ func (t FullTester) TestDependencies() ([]string, error) {
 			}
 			deps = append(deps, files...)
 		}
+		// if len(test.CustomTests) != 0 {
+		// 	files, err := custom.GetDependencies(ctx, t.workingDir, test.CustomTest)
+		// 	if err != nil {
+		// 		return nil, err
+		// 	}
+		// 	deps = append(deps, files...)
+		// }
 	}
 
 	return deps, nil
@@ -106,6 +114,7 @@ func (t FullTester) Test(ctx context.Context, out io.Writer, bRes []build.Artifa
 		return err
 	}
 
+	color.Default.Fprintln(out, "Priya: before runTests...")
 	return t.runTests(ctx, out, bRes)
 }
 
@@ -114,6 +123,11 @@ func (t FullTester) runTests(ctx context.Context, out io.Writer, bRes []build.Ar
 		if len(test.StructureTests) != 0 {
 			if err := t.runStructureTests(ctx, out, test, bRes); err != nil {
 				return fmt.Errorf("running structure tests: %w", err)
+			}
+		}
+		if len(test.CustomTests) != 0 {
+			if err := t.runCustomTests(ctx, out, test); err != nil {
+				return fmt.Errorf("running custom tests: %w", err)
 			}
 		}
 	}
@@ -129,4 +143,15 @@ func (t FullTester) runStructureTests(ctx context.Context, out io.Writer, tc *la
 	runner := structure.NewRunner(tc.StructureTests, t.workingDir, t.localDaemon.ExtraEnv())
 
 	return runner.Test(ctx, out, fqn)
+}
+
+func (t FullTester) runCustomTests(ctx context.Context, out io.Writer, tc *latest.TestCase) error {
+	for _, test := range tc.CustomTests {
+		runner := custom.NewRunner(test, t.workingDir, t.localDaemon.ExtraEnv())
+
+		if err := runner.Test(ctx, out); err != nil {
+			return fmt.Errorf("custom test runner error: %w", err)
+		}
+	}
+	return nil
 }
