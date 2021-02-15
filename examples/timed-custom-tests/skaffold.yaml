@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+build:
+  artifacts:
+  - image: skaffold-example
+test:
+  - image: skaffold-example
+    custom:
+      - command: ./test/test.sh
+        timeout: 60 #in seconds - 1m
+deploy:
+  kubectl:
+    manifests:
+      - k8s-*
+profiles:
+  - name: test
+    test:
+      - image: skaffold-example
+        custom:
+          - command: ./test/test.sh
+            timeout: 60 #in seconds - 1m
