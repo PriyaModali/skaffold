@@ -1,12 +1,9 @@
 /*
 Copyright 2019 The Skaffold Authors
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +25,7 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/docker"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/logfile"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
+	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/custom"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/test/structure"
 )
 
@@ -114,10 +112,16 @@ func (t FullTester) Test(ctx context.Context, out io.Writer, bRes []build.Artifa
 }
 
 func (t FullTester) runTests(ctx context.Context, out io.Writer, bRes []build.Artifact) error {
+	color.Default.Fprintln(out, "Priya: runTests...")
 	for _, test := range t.testCases {
 		if len(test.StructureTests) != 0 {
 			if err := t.runStructureTests(ctx, out, test, bRes); err != nil {
 				return fmt.Errorf("running structure tests: %w", err)
+			}
+		}
+		if len(test.CustomTests) != 0 {
+			if err := t.runCustomTests(ctx, out, test); err != nil {
+				return fmt.Errorf("running custom tests: %w", err)
 			}
 		}
 	}
@@ -129,4 +133,17 @@ func (t FullTester) runStructureTests(ctx context.Context, out io.Writer, tc *la
 	runner := structure.NewRunner(t.cfg, tc.StructureTests, t.imagesAreLocal)
 
 	return runner.Test(ctx, out, tc.ImageName, bRes)
+}
+
+func (t FullTester) runCustomTests(ctx context.Context, out io.Writer, tc *latest.TestCase) error {
+	color.Default.Fprintln(out, "Priya: runCustomTests()...")
+	for _, test := range tc.CustomTests {
+		runner := custom.NewRunner(t.cfg, test)
+
+		color.Default.Fprintln(out, "Priya: runCustomTests()...")
+		if err := runner.Test(ctx, out); err != nil {
+			return fmt.Errorf("custom test runner error: %w", err)
+		}
+	}
+	return nil
 }
