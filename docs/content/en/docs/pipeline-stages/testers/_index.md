@@ -7,9 +7,9 @@ aliases: [/docs/how-tos/testers]
 no_list: true
 ---
 
-Skaffold has an integrated testing phase between the build and deploy phases of the pipeline.
+Skaffold has an integrated testing phase between the build and deploy phases of the pipeline. It supports two types of testers.
 
 | Skaffold testers|Description| 
-|----------|-------|------|
+|----------|-------|
 | [Custom]({{< relref "/docs/pipeline-stages/tester/custom.md" >}}) | Enables users to run custom commands in the testing phase of the Skaffold pipeline | 
 | [Structure]({{< relref "/docs/pipeline-stages/tester/structure.md" >}}) | Enables users to validate built container images before deploying them to our cluster | 
