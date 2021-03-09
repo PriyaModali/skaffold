@@ -9,13 +9,14 @@ Skaffold command-line interface provides the following commands:
 
 End-to-end pipelines:
 
-* [skaffold run](#skaffold-run) - to build & deploy once
-* [skaffold dev](#skaffold-dev) - to trigger the watch loop build & deploy workflow with cleanup on exit
+* [skaffold run](#skaffold-run) - to build, test, & deploy once
+* [skaffold dev](#skaffold-dev) - to trigger the watch loop build, test & deploy workflow with cleanup on exit
 * [skaffold debug](#skaffold-debug) - to run a pipeline in debug mode
 
 Pipeline building blocks for CI/CD:
 
 * [skaffold build](#skaffold-build) - to just build and tag your image(s)
+* [skaffold test](#skaffold-test) - to run tests
 * [skaffold deploy](#skaffold-deploy) - to deploy the given image(s)
 * [skaffold delete](#skaffold-delete) - to cleanup the deployed artifacts
 * [skaffold render](#skaffold-render) - build and tag images, and output templated Kubernetes manifests
