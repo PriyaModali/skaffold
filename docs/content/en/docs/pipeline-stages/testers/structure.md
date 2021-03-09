@@ -1,9 +1,8 @@
 ---
-title: "Test"
-linkTitle: "Test"
+title: "Container Structure Test"
+linkTitle: "Structure"
 weight: 20
-featureId: test
-aliases: [/docs/how-tos/testers]
+featureId: test.structure
 ---
 
 It's common practice to validate built container images before deploying them to our cluster.

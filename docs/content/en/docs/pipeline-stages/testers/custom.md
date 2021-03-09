@@ -1,27 +1,26 @@
 ---
-title: "Test"
-linkTitle: "Test"
+title: "Custom Test"
+linkTitle: "Custom"
 weight: 20
-featureId: test
-aliases: [/docs/how-tos/testers/custom]
+featureId: test.custom
 ---
 
 
-Custom Test would allow developers to run custom commands as part of the development pipeline. The command will be executed in the testing phase of the Skaffold pipeline. It will run on the local machine where Skaffold is being executed and works with all supported Skaffold platforms (Linux, macOS, Windows). Users can opt out of running custom tests by using the skip test flag.
+Custom Test would allow developers to run custom commands as part of the development pipeline. The command will be executed in the testing phase of the Skaffold pipeline. It will run on the local machine where Skaffold is being executed and works with all supported Skaffold platforms. Users can opt out of running custom tests by using the skip test flag.
 
-CustomTest feature enables the users to:
-Run any kind of validation tests on their code (ex. unit tests)
-Run any kind validation and or security tests on the image before deploying the image to a cluster
+Custom Test enables the users to:
+- Run validation tests on their code (e.g., unit tests)
+- Run validation and security tests on the image before deploying the image to a cluster (e.g., Developers can shell out GCP Container Analysis or Anchore Grype in a custom test script and use that for validation )
 
 Multiple custom testers can be defined per test. The Skaffold pipeline will be blocked on the custom test to complete or fail. Skaffold will exit the loop when the first test fails. For ongoing test failures, Skaffold will stop the loop (not continue with the deploy) but will not exit the loop. Skaffold would surface the errors to the user and will keep the dev loop running. Skaffold will continue watching user specified test dependencies and re-trigger the loop whenever it detects another change. 
 
-Custom command has a configurable timeout option to wait for the command to return. If no timeout is specified, Skaffold will wait until the test command has completed execution. 
+CustomTester has a configurable timeout option to wait for the command to return. If no timeout is specified, Skaffold will wait until the test command has completed execution. 
 
 ### Contract between Skaffold and Custom command
 
 Skaffold will pass in the environment variable `$IMAGE` to the custom command to access the image.
 
-This variable can be set as a flag value input to the custom command --flag=$IMAGE
+This variable can be set as a flag value input to the custom command `--flag=$IMAGE`.
 
 
 ### Configuration
@@ -31,10 +30,6 @@ Supported schema for `CustomTest` includes:
 
 {{< schema root="CustomTest" >}}
 
-
-`command` is *required* and points to the custom command which will be executed in the testing phase.
-
-`timeoutSeconds` is *optional* and holds the timeout seconds for the command to execute.
 
 
 ### Dependencies for a Custom Test
@@ -62,7 +57,7 @@ Any paths in `Ignore` will be ignored by the skaffold file watcher, even if they
           -  "test.sh"
 ```
 
-#### Dependencies from a command
+#### Command for dependencies
 
 Sometimes users might have a command or a script that can provide the dependencies for a given test. Custom tester can ask Skaffold to execute a custom command, which Skaffold can use to get the dependencies for the test for file watching.
 
