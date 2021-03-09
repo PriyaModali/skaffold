@@ -110,3 +110,5 @@ It instructs Skaffold to run unit tests (main_test.go) located in the local fold
 A sample `test.sh` file, which runs unit tests when the test changes.
 
 {{% readfile file="samples/testers/custom/test.sh" %}}
+
+
