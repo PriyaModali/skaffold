@@ -3,7 +3,7 @@ title: "Test"
 linkTitle: "Test"
 weight: 20
 featureId: test
-aliases: [/docs/how-tos/testers/costom]
+aliases: [/docs/how-tos/testers/custom]
 ---
 
 
@@ -13,7 +13,7 @@ CustomTest feature enables the users to:
 Run any kind of validation tests on their code (ex. unit tests)
 Run any kind validation and or security tests on the image before deploying the image to a cluster
 
-Multiple custom testers can be defined per test. Skaffold pipeline will be blocked on the custom test to complete or fail. Skaffold will exit the loop when the first test fails. For ongoing test failures, Skaffold will stop the loop (not continue with the deploy) but will not exit the loop. Skaffold would surface the errors to the user and will keep the dev loop running. Skaffold will continue watching user specified dependencies and re-triggers the loop whenever it detects another change. 
+Multiple custom testers can be defined per test. The Skaffold pipeline will be blocked on the custom test to complete or fail. Skaffold will exit the loop when the first test fails. For ongoing test failures, Skaffold will stop the loop (not continue with the deploy) but will not exit the loop. Skaffold would surface the errors to the user and will keep the dev loop running. Skaffold will continue watching user specified test dependencies and re-trigger the loop whenever it detects another change. 
 
 Custom command has a configurable timeout option to wait for the command to return. If no timeout is specified, Skaffold will wait until the test command has completed execution. 
 
@@ -27,14 +27,14 @@ This variable can be set as a flag value input to the custom command --flag=$IMA
 ### Configuration
 
 To use a custom command, add a `custom` field to the corresponding test in the `test` section of the `skaffold.yaml`.
-Supported schema for `ustomTest` includes:
+Supported schema for `CustomTest` includes:
 
 {{< schema root="CustomTest" >}}
 
 
 `command` is *required* and points to the custom command which will be executed in the testing phase.
 
-`timeoutSeconds` is *optional* and holds teh timeout seconds for the command to execute.
+`timeoutSeconds` is *optional* and holds the timeout seconds for the command to execute.
 
 
 ### Dependencies for a Custom Test
@@ -79,12 +79,27 @@ The command *must* return dependencies as a JSON array, otherwise skaffold will 
 
 Syncable files must be included in both the `paths` section of `dependencies`, so that the skaffold file watcher knows to watch them, and the `sync` section, so that skaffold knows to sync them.  
 
+
 ### Logging
 
 `STDOUT` and `STDERR` from the custom command script will be redirected and displayed within skaffold logs.
 
 
-**Example**
+## Usage
+
+Custom tests will be automatically invoked as part of the run and dev commands, but can also be run independently by using the test subcommand.
+
+To execute the custom command as an independent test command run:
+```skaffold test```
+
+To execute custom command as part of the run command run:
+```skaffold run```
+
+To execute custom command as part of the dev loop run:
+```skaffold dev```
+
+
+### Example
 
 This following example shows the `customTest` section from a `skaffold.yaml`.
 It instructs Skaffold to run unit tests (main_test.go) located in the local folder when the main application changes:
@@ -95,21 +110,3 @@ It instructs Skaffold to run unit tests (main_test.go) located in the local fold
 A sample `test.sh` file, which runs unit tests when the test changes.
 
 {{% readfile file="samples/testers/custom/test.sh" %}}
-
-
-
-## Usage
-
-Custom tests will be automatically invoked as part of the run and dev commands, but can also be run independently by using the test subcommand.
-
-To execute the custom command as an independent test command run:
-```skaffold test```
-
-
-To execute custom command as part of the run command run:
-```skaffold run```
-
-
-To execute custom command as part of the dev loop run:
-```skaffold dev```
-
