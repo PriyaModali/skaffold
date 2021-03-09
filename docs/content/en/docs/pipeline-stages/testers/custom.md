@@ -13,7 +13,9 @@ CustomTest feature enables the users to:
 Run any kind of validation tests on their code (ex. unit tests)
 Run any kind validation and or security tests on the image before deploying the image to a cluster
 
-Multiple custom testers can be defined per test. If the tests fail, Skaffold will not continue on to the deploy stage. Skaffold pipeline will be blocked on the custom test to complete or fail. Skaffold will exit the loop when the first test fails. For ongoing test failures, Skaffold will stop the loop (not continue with the deploy) but will not exit the loop. Skaffold would surface the errors to the user and will keep the dev loop running. Skaffold will continue watching user specified dependencies and re-triggers the loop whenever it detects another change. Custom command has a configurable timeout option to wait for the command to return. If no timeout is specified, Skaffold will wait until the test command has completed execution. 
+Multiple custom testers can be defined per test. Skaffold pipeline will be blocked on the custom test to complete or fail. Skaffold will exit the loop when the first test fails. For ongoing test failures, Skaffold will stop the loop (not continue with the deploy) but will not exit the loop. Skaffold would surface the errors to the user and will keep the dev loop running. Skaffold will continue watching user specified dependencies and re-triggers the loop whenever it detects another change. 
+
+Custom command has a configurable timeout option to wait for the command to return. If no timeout is specified, Skaffold will wait until the test command has completed execution. 
 
 ### Contract between Skaffold and Custom command
 
