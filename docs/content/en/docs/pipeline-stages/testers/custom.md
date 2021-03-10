@@ -1,12 +1,12 @@
 ---
 title: "Custom Test"
-linkTitle: "Custom"
+linkTitle: "Custom Test"
 weight: 20
 featureId: test.custom
 ---
 
 
-Custom Test would allow developers to run custom commands as part of the development pipeline. The command will be executed in the testing phase of the Skaffold pipeline. It will run on the local machine where Skaffold is being executed and works with all supported Skaffold platforms. Users can opt out of running custom tests by using the skip test flag.
+Custom Test would allow developers to run custom commands as part of the development pipeline. The command will be executed in the testing phase of the Skaffold pipeline. It will run on the local machine where Skaffold is being executed and works with all supported Skaffold platforms. Users can opt out of running custom tests by using the `-skipTests` flag.
 
 Custom Test enables the users to:
 - Run validation tests on their code (e.g., unit tests)
@@ -84,13 +84,13 @@ Syncable files must be included in both the `paths` section of `dependencies`, s
 
 Custom tests will be automatically invoked as part of the run and dev commands, but can also be run independently by using the test subcommand.
 
-To execute the custom command as an independent test command run:
+- To execute the custom command as an independent test command run:
 ```skaffold test```
 
-To execute custom command as part of the run command run:
+- To execute custom command as part of the run command run:
 ```skaffold run```
 
-To execute custom command as part of the dev loop run:
+- To execute custom command as part of the dev loop run:
 ```skaffold dev```
 
 

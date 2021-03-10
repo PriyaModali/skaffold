@@ -1,6 +1,6 @@
 ---
 title: "Container Structure Test"
-linkTitle: "Structure"
+linkTitle: "Container Structure Test"
 weight: 20
 featureId: test.structure
 ---
