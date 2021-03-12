@@ -47,7 +47,6 @@ type Muted interface {
 type FullTester struct {
 	runners []runner
 	muted   Muted
-	// imagesAreLocal func(imageName string) (bool, error)
 }
 
 // runner is the lowest-level test executor in Skaffold, responsible for

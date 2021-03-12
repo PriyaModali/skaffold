@@ -24,7 +24,6 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/runner/runcontext"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/util"
 	"github.com/GoogleContainerTools/skaffold/testutil"
@@ -48,15 +47,7 @@ func TestNewCustomTestRunner(t *testing.T) {
 			},
 		}
 
-		cfg := &mockConfig{
-			workingDir: tmpDir.Root(),
-			tests: []*latest.TestCase{{
-				ImageName:   "image",
-				CustomTests: []latest.CustomTest{custom},
-			}},
-		}
-
-		testRunner, err := New(cfg, cfg.workingDir, custom)
+		testRunner, err := New(tmpDir.Root(), custom)
 		t.CheckNoError(err)
 		err = testRunner.Test(context.Background(), ioutil.Discard, nil)
 
@@ -104,15 +95,7 @@ func TestCustomCommandError(t *testing.T) {
 			}
 			t.Override(&util.DefaultExecCommand, testutil.CmdRunErr(command, fmt.Errorf(test.expectedError)))
 
-			cfg := &mockConfig{
-				workingDir: tmpDir.Root(),
-				tests: []*latest.TestCase{{
-					ImageName:   "image",
-					CustomTests: []latest.CustomTest{test.custom},
-				}},
-			}
-
-			testRunner, err := New(cfg, cfg.workingDir, test.custom)
+			testRunner, err := New(tmpDir.Root(), test.custom)
 			t.CheckNoError(err)
 			err = testRunner.Test(context.Background(), ioutil.Discard, nil)
 
@@ -136,14 +119,6 @@ func TestTestDependenciesCommand(t *testing.T) {
 			},
 		}
 
-		cfg := &mockConfig{
-			workingDir: tmpDir.Root(),
-			tests: []*latest.TestCase{{
-				ImageName:   "image",
-				CustomTests: []latest.CustomTest{custom},
-			}},
-		}
-
 		if runtime.GOOS == Windows {
 			t.Override(&util.DefaultExecCommand, testutil.CmdRunOut(
 				"cmd.exe /C echo [\"file1\",\"file2\",\"file3\"]",
@@ -157,7 +132,7 @@ func TestTestDependenciesCommand(t *testing.T) {
 		}
 
 		expected := []string{"file1", "file2", "file3"}
-		testRunner, err := New(cfg, cfg.workingDir, custom)
+		testRunner, err := New(tmpDir.Root(), custom)
 		t.CheckNoError(err)
 		deps, err := testRunner.TestDependencies()
 
@@ -217,25 +192,11 @@ func TestTestDependenciesPaths(t *testing.T) {
 				},
 			}
 
-			cfg := &mockConfig{
-				workingDir: tmpDir.Root(),
-				tests: []*latest.TestCase{{
-					ImageName:   "image",
-					CustomTests: []latest.CustomTest{custom},
-				}},
-			}
-
-			testRunner, err := New(cfg, cfg.workingDir, custom)
+			testRunner, err := New(tmpDir.Root(), custom)
 			t.CheckNoError(err)
 			deps, err := testRunner.TestDependencies()
 
 			t.CheckErrorAndDeepEqual(test.shouldErr, err, test.expected, deps)
 		})
 	}
-}
-
-type mockConfig struct {
-	runcontext.RunContext // Embedded to provide the default values.
-	workingDir            string
-	tests                 []*latest.TestCase
 }

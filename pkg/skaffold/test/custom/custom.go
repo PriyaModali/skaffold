@@ -27,13 +27,9 @@ import (
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/build"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/build/list"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/color"
-	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/docker"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/schema/latest"
 	"github.com/GoogleContainerTools/skaffold/pkg/skaffold/util"
 )
-
-// for tests
-var doRunCustomCommand = runCustomCommand
 
 const Windows string = "windows"
 
@@ -43,7 +39,7 @@ type Runner struct {
 }
 
 // New creates a new custom.Runner.
-func New(cfg docker.Config, wd string, ct latest.CustomTest) (*Runner, error) {
+func New(wd string, ct latest.CustomTest) (*Runner, error) {
 	return &Runner{
 		customTest:     ct,
 		testWorkingDir: wd,
@@ -52,7 +48,7 @@ func New(cfg docker.Config, wd string, ct latest.CustomTest) (*Runner, error) {
 
 // Test is the entrypoint for running custom tests
 func (ct *Runner) Test(ctx context.Context, out io.Writer, _ []build.Artifact) error {
-	if err := doRunCustomCommand(ctx, out, ct.customTest); err != nil {
+	if err := runCustomCommand(ctx, out, ct.customTest); err != nil {
 		return err
 	}
 
