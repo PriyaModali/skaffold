@@ -7,8 +7,7 @@ aliases: [/docs/getting-started]
 
 {{< alert title="Note" >}}
 
-To keep Skaffold up to date, update checks are made to Google servers to see if a new version of
-Skaffold is available.
+To keep Skaffold up to date, update checks are made to Google servers to see if a new version of Skaffold is available. By default, this behavior is enabled.
 
 You can turn this update check off by following [these instructions]({{<relref "/docs/references/privacy#update-check">}}).
 
@@ -22,9 +21,10 @@ Your use of this software is subject to the [Google Privacy Policy](https://poli
 The latest **stable** binaries can be found here:
 
 https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+
 https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-arm64
 
-Simply download the appropriate binary and add it to your `PATH`. Or, copy+paste one of the following commands in your terminal:
+Simply download the appropriate binary and add it to your `PATH`. Or, run one of the following commands in your terminal:
 
 ```bash
 # For Linux AMD64
@@ -41,6 +41,7 @@ sudo install skaffold /usr/local/bin/
 We also release a **bleeding edge** build, built from the latest commit:
 
 https://storage.googleapis.com/skaffold/builds/latest/skaffold-linux-amd64
+
 https://storage.googleapis.com/skaffold/builds/latest/skaffold-linux-arm64
 
 ```bash
@@ -62,9 +63,10 @@ sudo install skaffold /usr/local/bin/
 The latest **stable** binaries can be found here:
 
 https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-amd64
+
 https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-arm64
 
-Simply download the appropriate binary and add it to your `PATH`. Or, copy+paste one of the following commands in your terminal:
+Simply download the appropriate binary and add it to your `PATH`. Or, run one of the following commands in your terminal:
 
 ```bash
 # For macOS on AMD64
@@ -81,6 +83,7 @@ sudo install skaffold /usr/local/bin/
 We also release a **bleeding edge** build, built from the latest commit:
 
 https://storage.googleapis.com/skaffold/builds/latest/skaffold-darwin-amd64
+
 https://storage.googleapis.com/skaffold/builds/latest/skaffold-darwin-arm64
 
 ```bash
